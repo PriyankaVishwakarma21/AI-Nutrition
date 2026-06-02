@@ -1,0 +1,59 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)">
+  <div class="container" style="max-width:420px">
+    <div class="text-center mb-4">
+      <div style="font-size:3rem">🥗</div>
+      <h2 class="text-white fw-bold mb-1">AI Nutrition Dashboard</h2>
+      <p class="text-white-50">Your personalized nutrition companion</p>
+    </div>
+
+    <div class="card p-4 shadow-lg">
+      <h4 class="fw-bold mb-4">Sign In</h4>
+
+      @if (error()) {
+        <div class="alert alert-danger d-flex align-items-center gap-2 py-2">
+          <i class="bi bi-exclamation-circle-fill"></i> {{ error() }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="mb-3">
+          <label class="form-label fw-medium">Email</label>
+          <input type="email" class="form-control" formControlName="email"
+                 placeholder="you@example.com"
+                 [class.is-invalid]="emailCtrl.invalid && emailCtrl.touched">
+          @if (emailCtrl.invalid && emailCtrl.touched) {
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          }
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-medium">Password</label>
+          <div class="input-group">
+            <input [type]="showPw() ? 'text' : 'password'" class="form-control"
+                   formControlName="password" placeholder="••••••"
+                   [class.is-invalid]="passwordCtrl.invalid && passwordCtrl.touched">
+            <button type="button" class="btn btn-outline-secondary" (click)="showPw.set(!showPw())">
+              <i [class]="showPw() ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+          @if (passwordCtrl.invalid && passwordCtrl.touched) {
+            <div class="text-danger small mt-1">Password is required.</div>
+          }
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" [disabled]="loading()">
+          @if (loading()) {
+            <span class="spinner-border spinner-border-sm me-2"></span> Signing in…
+          } @else {
+            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+          }
+        </button>
+      </form>
+
+      <hr class="my-3">
+      <p class="text-center text-muted mb-0 small">
+        Don't have an account? <a routerLink="/register" class="fw-semibold text-decoration-none">Create one</a>
+      </p>
+    </div>
+  </div>
+</div>

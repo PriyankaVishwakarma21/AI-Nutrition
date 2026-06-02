@@ -1,0 +1,174 @@
+<div class="container-fluid p-3 p-lg-4 fade-in">
+
+  @if (loading()) {
+    <div class="d-flex justify-content-center align-items-center" style="min-height:60vh">
+      <div class="text-center">
+        <div class="spinner-border text-success mb-3" style="width:3rem;height:3rem"></div>
+        <p class="text-muted">Loading your dashboard…</p>
+      </div>
+    </div>
+  } @else {
+
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+      <h4 class="fw-bold mb-0">Good day, {{ (user()?.name ?? '').split(' ')[0] }}! 👋</h4>
+      <p class="text-muted mb-0 small">{{ now | date:'EEEE, MMMM d, y' }}</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a routerLink="/food-log" class="btn btn-sm btn-success px-3">
+        <i class="bi bi-plus-circle me-1"></i> Log Food
+      </a>
+      <button class="btn btn-sm btn-outline-secondary px-3" (click)="downloadReport()" [disabled]="dlLoading()">
+        @if (dlLoading()) { <span class="spinner-border spinner-border-sm"></span> }
+        @else { <i class="bi bi-file-earmark-pdf me-1"></i> PDF Report }
+      </button>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-calories h-100">
+        <div class="stat-value">{{ todayLog()?.totalCalories | number:'1.0-0' }}</div>
+        <div class="stat-label">kcal consumed</div>
+        <small class="opacity-75">Goal: {{ user()?.dailyCalorieGoal }}</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-protein h-100">
+        <div class="stat-value">{{ todayLog()?.totalProtein | number:'1.0-0' }}g</div>
+        <div class="stat-label">Protein</div>
+        <small class="opacity-75">Goal: {{ user()?.dailyProteinGoal }}g</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-carbs h-100">
+        <div class="stat-value">{{ todayLog()?.totalCarbs | number:'1.0-0' }}g</div>
+        <div class="stat-label">Carbohydrates</div>
+        <small class="opacity-75">Goal: {{ user()?.dailyCarbsGoal }}g</small>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card stat-fat h-100">
+        <div class="stat-value">{{ todayLog()?.totalFat | number:'1.0-0' }}g</div>
+        <div class="stat-label">Fat</div>
+        <small class="opacity-75">Goal: {{ user()?.dailyFatGoal }}g</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress + Charts -->
+  <div class="row g-3 mb-4">
+    <!-- Daily Progress -->
+    <div class="col-lg-4">
+      <div class="card h-100 p-4">
+        <h6 class="fw-bold mb-3"><i class="bi bi-bar-chart-fill text-success me-2"></i>Today's Progress</h6>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span>Calories</span><span class="fw-semibold">{{ caloriesPct() }}%</span>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-success" [style.width.%]="caloriesPct()"></div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span>Protein</span><span class="fw-semibold">{{ proteinPct() }}%</span>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-primary" [style.width.%]="proteinPct()"></div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span>Carbs</span><span class="fw-semibold">{{ carbsPct() }}%</span>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-warning" [style.width.%]="carbsPct()"></div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small mb-1">
+            <span>Fat</span><span class="fw-semibold">{{ fatPct() }}%</span>
+          </div>
+          <div class="progress">
+            <div class="progress-bar bg-danger" [style.width.%]="fatPct()"></div>
+          </div>
+        </div>
+
+        <!-- Water -->
+        <div class="mt-3 p-3 rounded-3" style="background:#e3f2fd">
+          <div class="d-flex align-items-center gap-2">
+            <span style="font-size:1.4rem">💧</span>
+            <div>
+              <div class="fw-bold">{{ todayLog()?.waterIntake || 0 }} ml</div>
+              <div class="text-muted small">Water intake today</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Macro Chart -->
+    <div class="col-lg-4">
+      <div class="card h-100 p-4">
+        <h6 class="fw-bold mb-3"><i class="bi bi-pie-chart-fill text-warning me-2"></i>Macro Breakdown</h6>
+        <div class="d-flex justify-content-center" style="max-height:240px">
+          <canvas #macroChart></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Trend -->
+    <div class="col-lg-4">
+      <div class="card h-100 p-4">
+        <h6 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow text-success me-2"></i>7-Day Calorie Trend</h6>
+        <canvas #weeklyChart></canvas>
+        <div class="mt-2 text-center">
+          <span class="badge bg-light text-dark">Avg: {{ weeklySummary()?.avgCalories }} kcal/day</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Today's Meals -->
+  <div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="fw-bold mb-0"><i class="bi bi-egg-fried text-warning me-2"></i>Today's Meals</h6>
+      <a routerLink="/food-log" class="btn btn-sm btn-outline-success">
+        <i class="bi bi-plus me-1"></i>Add Food
+      </a>
+    </div>
+
+    <div class="row g-3">
+      @for (meal of mealTypes; track meal) {
+        <div class="col-md-6 col-xl-3">
+          <div class="p-3 rounded-3" style="background:#f8f9fa;border:1px solid #e9ecef">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="fw-semibold text-capitalize">
+                {{ meal === 'breakfast' ? '🍳' : meal === 'lunch' ? '🥗' : meal === 'dinner' ? '🍽️' : '🍎' }}
+                {{ meal }}
+              </span>
+              <span class="badge" [class]="'meal-badge ' + meal">{{ mealCalories(meal) | number:'1.0-0' }} kcal</span>
+            </div>
+            @if (entriesForMeal(meal).length === 0) {
+              <p class="text-muted small mb-0">No entries yet</p>
+            } @else {
+              @for (entry of entriesForMeal(meal); track entry._id) {
+                <div class="d-flex justify-content-between small py-1" style="border-top:1px solid #e9ecef">
+                  <span>{{ entry.foodItem.name }}</span>
+                  <span class="text-muted">{{ (entry.foodItem.calories * entry.quantity) | number:'1.0-0' }} kcal</span>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  } <!-- end else -->
+</div>
+

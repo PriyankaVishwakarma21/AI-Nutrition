@@ -1,0 +1,72 @@
+<div class="container p-3 p-lg-4 fade-in" style="max-width:680px">
+  <h4 class="fw-bold mb-4"><i class="bi bi-person-circle text-primary me-2"></i>My Profile</h4>
+
+  <div class="card p-4">
+    @if (success()) { <div class="alert alert-success py-2"><i class="bi bi-check-circle me-2"></i>Profile updated!</div> }
+    @if (error())   { <div class="alert alert-danger py-2">{{ error() }}</div> }
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Name</label>
+        <input type="text" class="form-control" [value]="u.name || ''" (input)="setField('name', $any($event.target).value)">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Email</label>
+        <input type="email" class="form-control" [value]="u.email || ''" disabled>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-medium">Age</label>
+        <input type="number" class="form-control" [value]="u.age || ''" (input)="setField('age', +$any($event.target).value)" min="1">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-medium">Gender</label>
+        <select class="form-select" [value]="u.gender || ''" (change)="setField('gender', $any($event.target).value)">
+          <option value="">–</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-medium">Activity Level</label>
+        <select class="form-select" [value]="u.activityLevel || 'moderate'" (change)="setField('activityLevel', $any($event.target).value)">
+          <option value="sedentary">Sedentary</option>
+          <option value="light">Light</option>
+          <option value="moderate">Moderate</option>
+          <option value="active">Active</option>
+          <option value="very_active">Very Active</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Weight (kg)</label>
+        <input type="number" class="form-control" [value]="u.weight || ''" (input)="setField('weight', +$any($event.target).value)">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-medium">Height (cm)</label>
+        <input type="number" class="form-control" [value]="u.height || ''" (input)="setField('height', +$any($event.target).value)">
+      </div>
+
+      <div class="col-12"><hr class="my-1"><h6 class="fw-bold text-muted">Daily Goals</h6></div>
+      <div class="col-md-3">
+        <label class="form-label">Calories (kcal)</label>
+        <input type="number" class="form-control" [value]="u.dailyCalorieGoal || 2000" (input)="setField('dailyCalorieGoal', +$any($event.target).value)">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Protein (g)</label>
+        <input type="number" class="form-control" [value]="u.dailyProteinGoal || 150" (input)="setField('dailyProteinGoal', +$any($event.target).value)">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Carbs (g)</label>
+        <input type="number" class="form-control" [value]="u.dailyCarbsGoal || 250" (input)="setField('dailyCarbsGoal', +$any($event.target).value)">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Fat (g)</label>
+        <input type="number" class="form-control" [value]="u.dailyFatGoal || 65" (input)="setField('dailyFatGoal', +$any($event.target).value)">
+      </div>
+    </div>
+
+    <button class="btn btn-primary mt-4 px-4" (click)="save()" [disabled]="loading()">
+      @if (loading()) { <span class="spinner-border spinner-border-sm me-2"></span> } Save Changes
+    </button>
+  </div>
+</div>

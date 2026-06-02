@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: linear-gradient(90deg,#1a1a2e,#0f3460); box-shadow:0 2px 20px rgba(0,0,0,.3)">
+  <div class="container-fluid px-3">
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/dashboard">
+      <span style="font-size:1.4rem">🥗</span>
+      <span>AI Nutrition</span>
+    </a>
+
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-3" routerLink="/dashboard" routerLinkActive="active">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-3" routerLink="/food-log" routerLinkActive="active">
+            <i class="bi bi-journal-plus me-1"></i> Food Log
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-3" routerLink="/ai-analysis" routerLinkActive="active">
+            <i class="bi bi-robot me-1"></i> AI Analysis
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link px-3 rounded-3" routerLink="/profile" routerLinkActive="active">
+            <i class="bi bi-person-circle me-1"></i> Profile
+          </a>
+        </li>
+        <li class="nav-item ms-lg-2">
+          <button class="btn btn-outline-light btn-sm px-3" (click)="logout()">
+            <i class="bi bi-box-arrow-right me-1"></i> Logout
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
