@@ -36,7 +36,7 @@ Please respond with:
 Be concise, evidence-based, and encouraging.`;
 
     const completion = await getGroq().chat.completions.create({
-      model: 'llama3-8b-8192',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: 'You are a professional, encouraging registered dietitian. Provide practical, science-based nutrition guidance.' },
         { role: 'user', content: prompt }
@@ -77,7 +77,7 @@ For each, provide: name, brief description, and approximate macros (cal / protei
 Format: numbered list. Be practical and delicious.`;
 
     const completion = await getGroq().chat.completions.create({
-      model: 'llama3-8b-8192',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         { role: 'system', content: 'You are a friendly nutritionist helping plan healthy, delicious meals.' },
         { role: 'user', content: prompt }
